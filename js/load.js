@@ -9,7 +9,10 @@ $(document).ready(function() {
 });
 
 // OnClick Eventhandler für alle Internen Links
-$(document).on('click',function() {
+$(document).ready(hashLink = function() {
+	// bisherigen eventhandler entfernen
+	$('a[href^="#!"]').unbind('click');
+	// Eventhandler hinzufügen
 	$('a[href^="#!"]').click(function(){
 		hashtag = $(this).attr('href');
 		return toPage(hashtag);
@@ -44,6 +47,8 @@ function loadPage(hashtag){
 		$('#main .content').html(html);
 		// navigationspunkt aktivieren
 		setNavActiv('#!'+hashtag);
+		// hashlinks mit Eventhandler versehen
+		hashLink();
 	})
 	.fail(function(){ // falls die Seite nicht vorhanden ist
 		$.ajax({
