@@ -21,7 +21,7 @@ a:HOVER, a:FOCUS { text-decoration: underline; }
 
 #main .content { 
 	width: 900px;
-	background: rgba(153,153,153,.8);
+	background: rgba(170,170,170,.6);
 	padding:10px;
 	border-radius: 10px; 
 	min-height: 300px;
@@ -81,5 +81,5 @@ menu li a {
 	-ms-transition: all 1s ease;
 	transition: all 1s ease;
 }
-menu li a:HOVER { color: #000; background-color: #fff; }
+menu li a:HOVER, menu li.act a { color: #000; background-color: #fff; }
 

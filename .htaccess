@@ -1,0 +1,34 @@
+DirectoryIndex index.htm
+ErrorDocument 404 /fehler404.htm
+
+# Cache Kontrolle
+<IfModule mod_expires.c>
+	ExpiresActive On
+	ExpiresDefault "access plus 300 seconds"
+	ExpiresByType text/css "access plus 1 month"
+	ExpiresByType text/javascript "access plus 1 month"
+	ExpiresByType application/javascript "access plus 1 month"
+	ExpiresByType application/x-javascript "access plus 1 month"
+	ExpiresByType image/gif "access plus 1 month"
+	ExpiresByType image/png "access plus 1 month"
+	ExpiresByType image/jpeg "access plus 1 month"
+</IfModule>
+
+# Gzip Komprimierung für .css und .js Dateien
+<IfModule mod_gzip.c>
+    mod_gzip_on       Yes
+    mod_gzip_dechunk  Yes
+    mod_gzip_item_include file      \.(css|js)$
+    mod_gzip_item_include handler   ^cgi-script$
+    mod_gzip_item_include mime      ^text/.*
+    mod_gzip_item_include mime      ^application/x-javascript.*
+    mod_gzip_item_exclude mime      ^image/.*
+    mod_gzip_item_exclude rspheader ^Content-Encoding:.*gzip.*
+</IfModule>
+
+# Deflate Komprimierung für .css und .js Dateien
+<IfModule mod_deflate.c>
+	<FilesMatch "\.(css|js)">
+		SetOutputFilter DEFLATE
+	</FilesMatch>
+</IfModule>
