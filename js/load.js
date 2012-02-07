@@ -56,10 +56,12 @@ function loadPage(hashtag){
 			  url: '/fehler404.htm',
 		}).done(function( html ) { 
 			$('#main .content').html(html);
+			$('menu li.act').removeClass('act');
 		})
 		.fail(function(){
 			// letzter Fallback für nicht vorhandene Seiten
 			alert('seite nicht gefunden');
+			$('menu li.act').removeClass('act');
 		});
 	});
 }
@@ -69,6 +71,6 @@ function loadPage(hashtag){
  * @param href
  */
 function setNavActiv(href){
-	$('menu li a').attr('class','');
-	$('menu li a[href="'+href+'"]').parent().attr('class','act');
+	$('menu li.act').removeClass('act');
+	$('menu li a[href="'+href+'"]').parent().addClass('act');
 }
