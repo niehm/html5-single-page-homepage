@@ -42,9 +42,18 @@ function loadPage(hashtag){
 	// Inhalte anhand von Hashtag holen
 	$.ajax({
 		  type: 'POST',
-		  url: '/' + hashtag + '.htm',
-	}).done(function( html ) { 
-		$('#main .content').html(html);
+		  dataType: 'json',
+		  url: '/content.php',
+		  data: 'data=' + hashtag
+	}).done(function( data ) {
+		// content
+		$('#main .content').html(data.content);
+		
+		// meta daten ändern
+		$('title').html(data.meta.title);
+		$('meta[name="description"]').attr('content',data.meta.description);
+		$('meta[name="keywords"]').attr('content',data.meta.keywords);
+		
 		// navigationspunkt aktivieren
 		setNavActiv('#!'+hashtag);
 		// hashlinks mit Eventhandler versehen
@@ -57,11 +66,24 @@ function loadPage(hashtag){
 		}).done(function( html ) { 
 			$('#main .content').html(html);
 			$('menu li.act').removeClass('act');
+			
+			// meta daten
+			$('title').html('Fehler 404');
+			$('meta[name="description"]').attr('content','');
+			$('meta[name="keywords"]').attr('content','');
+			
+			// hashlinks mit Eventhandler versehen
+			hashLink();
 		})
 		.fail(function(){
 			// letzter Fallback für nicht vorhandene Seiten
 			alert('seite nicht gefunden');
 			$('menu li.act').removeClass('act');
+			
+			// meta daten
+			$('title').html('Fehler 404');
+			$('meta[name="description"]').attr('content','');
+			$('meta[name="keywords"]').attr('content','');
 		});
 	});
 }
