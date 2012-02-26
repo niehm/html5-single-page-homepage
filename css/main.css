@@ -34,14 +34,15 @@ a:HOVER, a:FOCUS { text-decoration: underline; }
 	position: absolute;
 	top:10px;
 	bottom:10px;
-	-webkit-transition: all 1s ease;
-	-moz-transition: all 1s ease;
-	-o-transition: all 1s ease;
-	-ms-transition: all 1s ease;
-	transition: all 1s ease;
+	-webkit-transition: margin 1s ease;
+	-moz-transition: margin 1s ease;
+	-o-transition: margin 1s ease;
+	-ms-transition: margin 1s ease;
+	transition: margin 1s ease;
+	margin:0;
 }
-#main .content.left { left:-910px; }
-#main .content.right { right:-910px; }
+#main .content.left { margin-left:-910px; }
+#main .content.right { margin-left:910px; }
 
 /** Sidebar **/
 #sidebar { 
