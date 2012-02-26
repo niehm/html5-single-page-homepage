@@ -25,6 +25,7 @@ a:HOVER, a:FOCUS { text-decoration: underline; }
 	left:0;
 	right:0;
 	margin:0 auto;
+	overflow:hidden;
 }
 
 #main .content { 
@@ -33,7 +34,14 @@ a:HOVER, a:FOCUS { text-decoration: underline; }
 	position: absolute;
 	top:10px;
 	bottom:10px;
+	-webkit-transition: all 1s ease;
+	-moz-transition: all 1s ease;
+	-o-transition: all 1s ease;
+	-ms-transition: all 1s ease;
+	transition: all 1s ease;
 }
+#main .content.left { left:-910px; }
+#main .content.right { right:-910px; }
 
 /** Sidebar **/
 #sidebar { 

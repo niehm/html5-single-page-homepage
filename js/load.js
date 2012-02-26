@@ -47,7 +47,8 @@ function loadPage(hashtag){
 		  data: 'data=' + hashtag
 	}).done(function( data ) {
 		// content
-		$('#main .content').html(data.content);
+		//$('#main .content').html(data.content);
+		changePage(data.content);
 		
 		// meta daten ändern
 		$('title').html(data.meta.title);
@@ -64,7 +65,9 @@ function loadPage(hashtag){
 			  type: 'POST',
 			  url: '/fehler404.htm',
 		}).done(function( html ) { 
-			$('#main .content').html(html);
+			//Content
+			//$('#main .content').html(html);
+			changePage(html);
 			$('menu li.act').removeClass('act');
 			
 			// meta daten
@@ -86,6 +89,24 @@ function loadPage(hashtag){
 			$('meta[name="keywords"]').attr('content','');
 		});
 	});
+}
+
+/**
+ * ID des Seiteninhalts
+ */
+var pageID = 0;
+
+/**
+ * Wechselt den inhalt des Hauptcontainers aus
+ * @param content
+ */
+function changePage(content){
+	pageID++;
+	$('#content'+(pageID-1)).after($('<div class="content left" id="content'+pageID+'">'+ content +'</div>'));
+	
+	setTimeout(function(){ $('#content'+pageID).removeClass('left'); },10);
+	$('#content'+(pageID-1)).addClass('right');
+	setTimeout(function(){  $('#main .content:not(#content'+pageID+')').remove(); },1000);
 }
 
 /**
