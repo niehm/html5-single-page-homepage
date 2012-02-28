@@ -50,6 +50,13 @@ function loadPage(hashtag){
 		//$('#main .content').html(data.content);
 		changePage(data.content);
 		
+		// sidebar		
+		if(data.sidebar.length > 0){
+			for(var i = 0; i<= data.sidebar.length; i++){
+				changeSidebar((i+1), data.sidebar[i]);
+			}
+		}
+		
 		// meta daten ändern
 		$('title').html(data.meta.title);
 		$('meta[name="description"]').attr('content',data.meta.description);
@@ -102,11 +109,51 @@ var pageID = 0;
  */
 function changePage(content){
 	pageID++;
-	$('#content'+(pageID-1)).after($('<div class="content left" id="content'+pageID+'">'+ content +'</div>'));
+	// Neues Element einfügen
+	$('#content'+(pageID-1)).after($('<div class="content in" id="content'+pageID+'">'+ content +'</div>'));
 	
-	setTimeout(function(){ $('#content'+pageID).removeClass('left'); },10);
-	$('#content'+(pageID-1)).addClass('right');
+	// mit kleiner verzögerung die Class entfernen für Slide-In
+	setTimeout(function(){ $('#content'+pageID).removeClass('in'); },10);
+	// Class hinzufügen für Slide-Out
+	$('#content'+(pageID-1)).addClass('out');
+	// Altes Element entfernen
 	setTimeout(function(){  $('#main .content:not(#content'+pageID+')').remove(); },1000);
+}
+
+/**
+ * ID's für die Sidebar Inhalte
+ */
+var sidebarID = new Object();
+$(document).ready(function() { 
+	$('#sidebar aside').each(function (){
+		var id = $(this).attr('id');
+		sidebarID[id] = 0;
+	});
+});
+
+/**
+ * Wechselt den Inhalt eines Sidebar Containers
+ * @param id
+ * @param content
+ */
+function changeSidebar(id, content){
+	sidebarID['s'+id]++;
+	
+	// Neues Element einfügen
+	$('#s' + id + ' .content.s' + (sidebarID['s'+id]-1)).after($('<div class="content in s'+sidebarID['s'+id]+'">'+ content +'</div>'));
+	
+	// mit kleiner verzögerung die Class entfernen für Slide-In
+	setTimeout(function(){ 
+		$('#s' + id + ' .content.s'+sidebarID['s'+id]).removeClass('in');
+	},10);
+	
+	// Class hinzufügen für Slide-Out
+	$('#s' + id + ' .content.s' + (sidebarID['s'+id]-1)).addClass('out');
+	
+	// Altes Element entfernen
+	setTimeout(function(){  
+		$('#s' + id + ' .content:not(.s' + sidebarID['s'+id] + ')').remove(); 
+	},1000);
 }
 
 /**
