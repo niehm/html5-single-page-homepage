@@ -39,9 +39,9 @@
 								);
 			
 			$sidebar = array(
-								'<a href="https://plus.google.com/u/0/109853826166288612269" title="Cenyn auf G+" target="_blank"><img src="images/buch_sig.png" alt="Buch, by Cenyn" /></a>',
-								'<a href="https://plus.google.com/u/0/109853826166288612269" title="Cenyn auf G+" target="_blank"><img src="images/omega.png" alt="Omega, by Cenyn" /></a>',
-								'<a href="https://plus.google.com/u/0/109853826166288612269" title="Cenyn auf G+" target="_blank"><img src="images/punk.png" alt="Punk, by Cenyn" /></a>',
+								'<a href="https://plus.google.com/u/0/109853826166288612269" title="cenyn auf G+" target="_blank"><img src="images/buch_sig.png" alt="Buch, by cenyn" /></a>',
+								'<a href="https://plus.google.com/u/0/109853826166288612269" title="cenyn auf G+" target="_blank"><img src="images/omega.png" alt="Omega, by cenyn" /></a>',
+								'<a href="https://plus.google.com/u/0/109853826166288612269" title="cenyn auf G+" target="_blank"><img src="images/punk.png" alt="Punk, by cenyn" /></a>',
 							 );
 		break;
 	}
