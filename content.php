@@ -43,6 +43,7 @@
 								'<a href="https://plus.google.com/u/0/109853826166288612269" title="cenyn auf G+" target="_blank"><img src="images/omega.png" alt="Omega, by cenyn" /></a>',
 								'<a href="https://plus.google.com/u/0/109853826166288612269" title="cenyn auf G+" target="_blank"><img src="images/punk.png" alt="Punk, by cenyn" /></a>',
 							 );
+			shuffle($sidebar);
 		break;
 	}
 	
