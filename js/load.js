@@ -25,9 +25,9 @@ $(document).ready(hashLink = function() {
  * @returns {Boolean}
  */
 function toPage(hashtag){
+	loadPage(hashtag);
 	// url zuweisen
 	window.location.hash = hashtag;
-	loadPage(hashtag);
 	return false;
 }
 
@@ -36,66 +36,68 @@ function toPage(hashtag){
  * @param hashtag
  */
 function loadPage(hashtag){
-	// hashtag von #! befreien
-	hashtag = hashtag.substring(2);
-	
-	// Inhalte anhand von Hashtag holen
-	$.ajax({
-		  type: 'POST',
-		  dataType: 'json',
-		  url: '/content.php',
-		  data: 'data=' + hashtag
-	}).done(function( data ) {
-		// content
-		//$('#main .content').html(data.content);
-		changePage(data.content);
+	if(hashtag != window.location.hash || $('#main .content').html().trim() == ''){
+		// hashtag von #! befreien
+		hashtag = hashtag.substring(2);
 		
-		// sidebar		
-		if(data.sidebar.length > 0){
-			for(var i = 0; i<= data.sidebar.length; i++){
-				changeSidebar((i+1), data.sidebar[i]);
-			}
-		}
-		
-		// meta daten ändern
-		$('title').html(data.meta.title);
-		$('meta[name="description"]').attr('content',data.meta.description);
-		$('meta[name="keywords"]').attr('content',data.meta.keywords);
-		
-		// navigationspunkt aktivieren
-		setNavActiv('#!'+hashtag);
-		// hashlinks mit Eventhandler versehen
-		hashLink();
-	})
-	.fail(function(){ // falls die Seite nicht vorhanden ist
+		// Inhalte anhand von Hashtag holen
 		$.ajax({
 			  type: 'POST',
-			  url: '/fehler404.htm',
-		}).done(function( html ) { 
-			//Content
-			//$('#main .content').html(html);
-			changePage(html);
-			$('menu li.act').removeClass('act');
+			  dataType: 'json',
+			  url: '/content.php',
+			  data: 'data=' + hashtag
+		}).done(function( data ) {
+			// content
+			//$('#main .content').html(data.content);
+			changePage(data.content);
 			
-			// meta daten
-			$('title').html('Fehler 404');
-			$('meta[name="description"]').attr('content','');
-			$('meta[name="keywords"]').attr('content','');
+			// sidebar		
+			if(data.sidebar.length > 0){
+				for(var i = 0; i<= data.sidebar.length; i++){
+					changeSidebar((i+1), data.sidebar[i]);
+				}
+			}
 			
+			// meta daten ändern
+			$('title').html(data.meta.title);
+			$('meta[name="description"]').attr('content',data.meta.description);
+			$('meta[name="keywords"]').attr('content',data.meta.keywords);
+			
+			// navigationspunkt aktivieren
+			setNavActiv('#!'+hashtag);
 			// hashlinks mit Eventhandler versehen
 			hashLink();
 		})
-		.fail(function(){
-			// letzter Fallback für nicht vorhandene Seiten
-			alert('seite nicht gefunden');
-			$('menu li.act').removeClass('act');
-			
-			// meta daten
-			$('title').html('Fehler 404');
-			$('meta[name="description"]').attr('content','');
-			$('meta[name="keywords"]').attr('content','');
+		.fail(function(){ // falls die Seite nicht vorhanden ist
+			$.ajax({
+				  type: 'POST',
+				  url: '/fehler404.htm',
+			}).done(function( html ) { 
+				//Content
+				//$('#main .content').html(html);
+				changePage(html);
+				$('menu li.act').removeClass('act');
+				
+				// meta daten
+				$('title').html('Fehler 404');
+				$('meta[name="description"]').attr('content','');
+				$('meta[name="keywords"]').attr('content','');
+				
+				// hashlinks mit Eventhandler versehen
+				hashLink();
+			})
+			.fail(function(){
+				// letzter Fallback für nicht vorhandene Seiten
+				alert('seite nicht gefunden');
+				$('menu li.act').removeClass('act');
+				
+				// meta daten
+				$('title').html('Fehler 404');
+				$('meta[name="description"]').attr('content','');
+				$('meta[name="keywords"]').attr('content','');
+			});
 		});
-	});
+	}
 }
 
 /**
