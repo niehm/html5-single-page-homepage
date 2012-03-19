@@ -8,96 +8,75 @@ $(document).ready(function() {
 	loadPage(hashtag);
 });
 
-// OnClick Eventhandler für alle Internen Links
-$(document).ready(hashLink = function() {
-	// bisherigen eventhandler entfernen
-	$('a[href^="#!"]').unbind('click');
-	// Eventhandler hinzufügen
-	$('a[href^="#!"]').click(function(){
-		hashtag = $(this).attr('href');
-		return toPage(hashtag);
-	});
+// Eventlistener für seitenwechsel
+window.addEventListener('hashchange', function(){
+	// get current hashtag
+	var hashtag = window.location.hash;
+	loadPage(hashtag);
+	console.log(hashtag);
 });
 
-/**
- * Zu Seite wechseln
- * @param hashtag
- * @returns {Boolean}
- */
-function toPage(hashtag){
-	loadPage(hashtag);
-	// url zuweisen
-	window.location.hash = hashtag;
-	return false;
-}
 
 /**
  * Lädt den seiteninhalt anhand von einem Hashtag
  * @param hashtag
  */
 function loadPage(hashtag){
-	if(hashtag != window.location.hash || $('#main .content').html().trim() == ''){
-		// hashtag von #! befreien
-		hashtag = hashtag.substring(2);
+	// hashtag von #! befreien
+	hashtag = hashtag.substring(2);
+	
+	// Inhalte anhand von Hashtag holen
+	$.ajax({
+		  type: 'POST',
+		  dataType: 'json',
+		  url: '/content.php',
+		  data: 'data=' + hashtag
+	}).done(function( data ) {
+		// content
+		//$('#main .content').html(data.content);
+		changePage(data.content);
 		
-		// Inhalte anhand von Hashtag holen
+		// sidebar		
+		if(data.sidebar.length > 0){
+			for(var i = 0; i<= data.sidebar.length; i++){
+				changeSidebar((i+1), data.sidebar[i]);
+			}
+		}
+		
+		// meta daten ändern
+		$('title').html(data.meta.title);
+		$('meta[name="description"]').attr('content',data.meta.description);
+		$('meta[name="keywords"]').attr('content',data.meta.keywords);
+		
+		// navigationspunkt aktivieren
+		setNavActiv('#!'+hashtag);
+	})
+	.fail(function(){ // falls die Seite nicht vorhanden ist
 		$.ajax({
 			  type: 'POST',
-			  dataType: 'json',
-			  url: '/content.php',
-			  data: 'data=' + hashtag
-		}).done(function( data ) {
-			// content
-			//$('#main .content').html(data.content);
-			changePage(data.content);
+			  url: '/fehler404.htm',
+		}).done(function( html ) { 
+			//Content
+			//$('#main .content').html(html);
+			changePage(html);
+			$('menu li.act').removeClass('act');
 			
-			// sidebar		
-			if(data.sidebar.length > 0){
-				for(var i = 0; i<= data.sidebar.length; i++){
-					changeSidebar((i+1), data.sidebar[i]);
-				}
-			}
-			
-			// meta daten ändern
-			$('title').html(data.meta.title);
-			$('meta[name="description"]').attr('content',data.meta.description);
-			$('meta[name="keywords"]').attr('content',data.meta.keywords);
-			
-			// navigationspunkt aktivieren
-			setNavActiv('#!'+hashtag);
-			// hashlinks mit Eventhandler versehen
-			hashLink();
+			// meta daten
+			$('title').html('Fehler 404');
+			$('meta[name="description"]').attr('content','');
+			$('meta[name="keywords"]').attr('content','');
 		})
-		.fail(function(){ // falls die Seite nicht vorhanden ist
-			$.ajax({
-				  type: 'POST',
-				  url: '/fehler404.htm',
-			}).done(function( html ) { 
-				//Content
-				//$('#main .content').html(html);
-				changePage(html);
-				$('menu li.act').removeClass('act');
-				
-				// meta daten
-				$('title').html('Fehler 404');
-				$('meta[name="description"]').attr('content','');
-				$('meta[name="keywords"]').attr('content','');
-				
-				// hashlinks mit Eventhandler versehen
-				hashLink();
-			})
-			.fail(function(){
-				// letzter Fallback für nicht vorhandene Seiten
-				alert('seite nicht gefunden');
-				$('menu li.act').removeClass('act');
-				
-				// meta daten
-				$('title').html('Fehler 404');
-				$('meta[name="description"]').attr('content','');
-				$('meta[name="keywords"]').attr('content','');
-			});
+		.fail(function(){
+			// letzter Fallback für nicht vorhandene Seiten
+			alert('seite nicht gefunden');
+			$('menu li.act').removeClass('act');
+			
+			// meta daten
+			$('title').html('Fehler 404');
+			$('meta[name="description"]').attr('content','');
+			$('meta[name="keywords"]').attr('content','');
 		});
-	}
+	});
 }
 
 /**
